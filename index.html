@@ -31,12 +31,17 @@ section { padding:72px 24px; }
 .section-label { font-family:'Outfit',sans-serif; font-size:11px; font-weight:700; color:var(--blue); text-transform:uppercase; display:inline-block; margin-bottom:10px; }
 .section-title { font-family:'Outfit',sans-serif; font-weight:800; font-size:clamp(26px,6vw,40px); margin-bottom:36px; }
 
-.gallery-wrapper { display:flex; overflow-x:auto; gap:12px; scrollbar-width:none; -ms-overflow-style:none; }
+.gallery-container { position: relative; overflow: hidden; }
+.gallery-wrapper { display:flex; overflow-x:auto; gap:12px; scroll-behavior: smooth; padding-bottom:12px; scrollbar-width:none; -ms-overflow-style:none; }
 .gallery-wrapper::-webkit-scrollbar { display:none; }
 .gallery-row { display:flex; gap:12px; flex-shrink:0; }
-.gallery-item { flex:0 0 200px; height:150px; border-radius:12px; overflow:hidden; cursor:pointer; }
+.gallery-item { flex:0 0 250px; height:180px; border-radius:12px; overflow:hidden; cursor:pointer; }
 .gallery-item img { width:100%; height:100%; object-fit:cover; transition:transform 0.3s; }
 .gallery-item:hover img { transform: scale(1.05); }
+
+.arrow { position:absolute; top:50%; transform:translateY(-50%); background:rgba(0,0,0,0.5); color:#fff; font-size:36px; width:50px; height:50px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; z-index:10; user-select:none; }
+.arrow-left { left:10px; }
+.arrow-right { right:10px; }
 
 .lightbox { display:none; position:fixed; inset:0; z-index:999; background: rgba(15,23,42,0.92); align-items:center; justify-content:center; padding:24px; cursor:zoom-out; }
 .lightbox.active { display:flex; }
@@ -63,9 +68,13 @@ section { padding:72px 24px; }
 <section id="lavori">
   <span class="section-label">Portfolio</span>
   <h2 class="section-title">I Nostri Lavori</h2>
-  <div class="gallery-wrapper" id="galleryWrapper">
-    <div class="gallery-row" id="row1"></div>
-    <div class="gallery-row" id="row2"></div>
+  <div class="gallery-container">
+    <div class="arrow arrow-left" id="arrowLeft">‹</div>
+    <div class="arrow arrow-right" id="arrowRight">›</div>
+    <div class="gallery-wrapper" id="galleryWrapper">
+      <div class="gallery-row" id="row1"></div>
+      <div class="gallery-row" id="row2"></div>
+    </div>
   </div>
 </section>
 
@@ -75,9 +84,10 @@ section { padding:72px 24px; }
 </div>
 
 <script>
-const total = 87; 
+const total = 87;
 const row1 = document.getElementById('row1');
 const row2 = document.getElementById('row2');
+const galleryWrapper = document.getElementById('galleryWrapper');
 
 for(let i=1; i<=total; i++){
   const item = document.createElement('div');
@@ -90,6 +100,10 @@ for(let i=1; i<=total; i++){
   item.addEventListener('click',()=>openLightbox(img.src,img.alt));
   if(i%2===1){ row1.appendChild(item); } else { row2.appendChild(item); }
 }
+
+// Frecce per scroll
+document.getElementById('arrowLeft').addEventListener('click',()=>{ galleryWrapper.scrollBy({left:-300, behavior:'smooth'}); });
+document.getElementById('arrowRight').addEventListener('click',()=>{ galleryWrapper.scrollBy({left:300, behavior:'smooth'}); });
 
 const lightbox = document.getElementById('lightbox');
 const lightboxImg = document.getElementById('lightboxImg');
