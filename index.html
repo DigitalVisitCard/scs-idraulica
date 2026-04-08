@@ -212,15 +212,15 @@ section { padding: 72px 24px; }
 </div>
 
 <script>
-const total = 87; 
-const basePath = ''; 
+const total = 87; // numero di immagini
+const basePath = ''; // perché le immagini sono nella root
 const grid = document.getElementById('galleryGrid');
 
 for (let i = 1; i <= total; i++) {
   const item = document.createElement('div');
   item.className = 'gallery-item';
   const img = document.createElement('img');
-  img.src = basePath + i + '.jpeg'; // usa solo il numero e l'estensione
+  img.src = basePath + 'foto' + i + '.jpeg'; // usa 'foto' + numero + estensione
   img.alt = 'Lavoro ' + i;
   img.loading = 'lazy';
   img.decoding = 'async';
