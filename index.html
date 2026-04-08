@@ -212,22 +212,22 @@ section { padding: 72px 24px; }
 </div>
 
 <script>
-const total = 87; // numero totale immagini
+const total = 87; 
+const basePath = ''; 
 const grid = document.getElementById('galleryGrid');
 
-for (let i=1; i<=total; i++) {
+for (let i = 1; i <= total; i++) {
   const item = document.createElement('div');
   item.className = 'gallery-item';
   const img = document.createElement('img');
-  img.src = `foto${i}.jpeg`; // usa .jpeg
-  img.alt = `Lavoro ${i}`;
+  img.src = basePath + i + '.jpeg'; // usa solo il numero e l'estensione
+  img.alt = 'Lavoro ' + i;
   img.loading = 'lazy';
   img.decoding = 'async';
   item.appendChild(img);
-  item.addEventListener('click',()=>openLightbox(img.src,img.alt));
+  item.addEventListener('click', () => openLightbox(img.src, img.alt));
   grid.appendChild(item);
 }
-
 const lightbox = document.getElementById('lightbox');
 const lightboxImg = document.getElementById('lightboxImg');
 const lightboxClose = document.getElementById('lightboxClose');
