@@ -117,7 +117,9 @@ nav {
 .gallery-item:hover img { transform:scale(1.05); filter:saturate(1); }
 
 /* RIGA VIDEO — stesso layout delle righe foto */
-.video-row { display:flex; gap:8px; }
+.video-outer { position:relative; }
+.video-scroll { overflow:hidden; width:100%; }
+.video-row { display:flex; gap:8px; transition:transform 0.45s cubic-bezier(0.25,0.46,0.45,0.94); }
 .video-item {
   flex:0 0 calc(50% - 4px);
   aspect-ratio:4/3;
@@ -286,23 +288,30 @@ footer p { font-size:10px; color:rgba(255,255,255,0.3); letter-spacing:0.06em; t
         <div class="gallery-track">
           <div class="gallery-row" id="rowTop"></div>
           <div class="gallery-row" id="rowBot"></div>
-          <div class="video-row">
-            <div class="video-item" onclick="openVideoLB('video1.mp4')">
-              <video muted preload="metadata" playsinline><source src="video1.mp4" type="video/mp4"></video>
-              <div class="video-play-btn">&#9654;</div>
+          <!-- riga video con frecce proprie -->
+          <div class="video-outer">
+            <button class="arrow-btn arrow-left" id="videoArrowLeft">&#8592;</button>
+            <div class="video-scroll">
+              <div class="video-row" id="rowVideo">
+                <div class="video-item" onclick="openVideoLB('video1.mp4')">
+                  <video muted preload="metadata" playsinline><source src="video1.mp4" type="video/mp4"></video>
+                  <div class="video-play-btn">&#9654;</div>
+                </div>
+                <div class="video-item" onclick="openVideoLB('video2.mp4')">
+                  <video muted preload="metadata" playsinline><source src="video2.mp4" type="video/mp4"></video>
+                  <div class="video-play-btn">&#9654;</div>
+                </div>
+                <div class="video-item" onclick="openVideoLB('video3.mp4')">
+                  <video muted preload="metadata" playsinline><source src="video3.mp4" type="video/mp4"></video>
+                  <div class="video-play-btn">&#9654;</div>
+                </div>
+                <div class="video-item" onclick="openVideoLB('video4.mp4')">
+                  <video muted preload="metadata" playsinline><source src="video4.mp4" type="video/mp4"></video>
+                  <div class="video-play-btn">&#9654;</div>
+                </div>
+              </div>
             </div>
-            <div class="video-item" onclick="openVideoLB('video2.mp4')">
-              <video muted preload="metadata" playsinline><source src="video2.mp4" type="video/mp4"></video>
-              <div class="video-play-btn">&#9654;</div>
-            </div>
-            <div class="video-item" onclick="openVideoLB('video3.mp4')">
-              <video muted preload="metadata" playsinline><source src="video3.mp4" type="video/mp4"></video>
-              <div class="video-play-btn">&#9654;</div>
-            </div>
-            <div class="video-item" onclick="openVideoLB('video4.mp4')">
-              <video muted preload="metadata" playsinline><source src="video4.mp4" type="video/mp4"></video>
-              <div class="video-play-btn">&#9654;</div>
-            </div>
+            <button class="arrow-btn arrow-right" id="videoArrowRight">&#8594;</button>
           </div>
         </div>
       </div>
@@ -403,7 +412,24 @@ lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLB(); 
 document.getElementById('lightboxClose').addEventListener('click', closeLB);
 
 // ---- LIGHTBOX VIDEO ----
-const videoLightbox = document.getElementById('videoLightbox');
+let videoOffset = 0;
+function getVideoItemWidth() {
+  const first = document.querySelector('#rowVideo .video-item');
+  return first ? first.offsetWidth + 8 : 0;
+}
+function slideVideo(dir) {
+  const w = getVideoItemWidth();
+  const vis = window.innerWidth >= 600 ? 4 : 2;
+  const total = 4;
+  const maxOffset = Math.max(0, (total - vis) * w);
+  videoOffset = Math.max(0, Math.min(videoOffset + dir * w, maxOffset));
+  document.getElementById('rowVideo').style.transform = 'translateX(-' + videoOffset + 'px)';
+}
+document.getElementById('videoArrowLeft').addEventListener('click', () => slideVideo(-1));
+document.getElementById('videoArrowRight').addEventListener('click', () => slideVideo(1));
+window.addEventListener('resize', () => { videoOffset = 0; document.getElementById('rowVideo').style.transform = 'translateX(0)'; });
+
+
 const videoPlayer = document.getElementById('videoLightboxPlayer');
 function openVideoLB(src) {
   videoPlayer.src = src;
@@ -431,4 +457,5 @@ document.getElementById('mailCopy').addEventListener('click', () => {
 
 </body>
 </html>
+
 
