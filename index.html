@@ -117,13 +117,7 @@ nav {
 .gallery-item:hover img { transform:scale(1.05); filter:saturate(1); }
 
 /* RIGA VIDEO — stesso layout delle righe foto */
-.video-outer .arrow-left {
-  left: -16px;
-}
-
-.video-outer .arrow-right {
-  right: -16px;
-}
+.video-outer { position:relative; }
 .video-scroll { overflow:hidden; width:100%; }
 .video-row { display:flex; gap:8px; transition:transform 0.45s cubic-bezier(0.25,0.46,0.45,0.94); }
 .video-item {
