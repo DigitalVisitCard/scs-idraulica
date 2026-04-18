@@ -288,34 +288,27 @@ footer p { font-size:10px; color:rgba(255,255,255,0.3); letter-spacing:0.06em; t
         <div class="gallery-track">
           <div class="gallery-row" id="rowTop"></div>
           <div class="gallery-row" id="rowBot"></div>
+          <div class="gallery-row" id="rowVideo">
+            <div class="video-item" onclick="openVideoLB('video1.mp4')">
+              <video muted preload="metadata" playsinline><source src="video1.mp4" type="video/mp4"></video>
+              <div class="video-play-btn">&#9654;</div>
+            </div>
+            <div class="video-item" onclick="openVideoLB('video2.mp4')">
+              <video muted preload="metadata" playsinline><source src="video2.mp4" type="video/mp4"></video>
+              <div class="video-play-btn">&#9654;</div>
+            </div>
+            <div class="video-item" onclick="openVideoLB('video3.mp4')">
+              <video muted preload="metadata" playsinline><source src="video3.mp4" type="video/mp4"></video>
+              <div class="video-play-btn">&#9654;</div>
+            </div>
+            <div class="video-item" onclick="openVideoLB('video4.mp4')">
+              <video muted preload="metadata" playsinline><source src="video4.mp4" type="video/mp4"></video>
+              <div class="video-play-btn">&#9654;</div>
+            </div>
+          </div>
         </div>
       </div>
       <button class="arrow-btn arrow-right" id="arrowRight">&#8594;</button>
-    </div>
-    <!-- riga video con frecce proprie, fuori dal gallery-scroll -->
-    <div class="video-outer" style="margin-top:8px;">
-      <button class="arrow-btn arrow-left" id="videoArrowLeft">&#8592;</button>
-      <div class="video-scroll">
-        <div class="video-row" id="rowVideo">
-          <div class="video-item" onclick="openVideoLB('video1.mp4')">
-            <video muted preload="metadata" playsinline><source src="video1.mp4" type="video/mp4"></video>
-            <div class="video-play-btn">&#9654;</div>
-          </div>
-          <div class="video-item" onclick="openVideoLB('video2.mp4')">
-            <video muted preload="metadata" playsinline><source src="video2.mp4" type="video/mp4"></video>
-            <div class="video-play-btn">&#9654;</div>
-          </div>
-          <div class="video-item" onclick="openVideoLB('video3.mp4')">
-            <video muted preload="metadata" playsinline><source src="video3.mp4" type="video/mp4"></video>
-            <div class="video-play-btn">&#9654;</div>
-          </div>
-          <div class="video-item" onclick="openVideoLB('video4.mp4')">
-            <video muted preload="metadata" playsinline><source src="video4.mp4" type="video/mp4"></video>
-            <div class="video-play-btn">&#9654;</div>
-          </div>
-        </div>
-      </div>
-      <button class="arrow-btn arrow-right" id="videoArrowRight">&#8594;</button>
     </div>
   </div>
 </section>
@@ -395,6 +388,7 @@ function slide(dir) {
   offset = Math.max(0, Math.min(offset + dir * w, maxOffset));
   rowTop.style.transform = 'translateX(-' + offset + 'px)';
   rowBot.style.transform = 'translateX(-' + offset + 'px)';
+  document.getElementById('rowVideo').style.transform = 'translateX(-' + offset + 'px)';
 }
 document.getElementById('arrowLeft').addEventListener('click', () => slide(-1));
 document.getElementById('arrowRight').addEventListener('click', () => slide(1));
@@ -402,6 +396,7 @@ window.addEventListener('resize', () => {
   offset = 0;
   rowTop.style.transform = 'translateX(0)';
   rowBot.style.transform = 'translateX(0)';
+  document.getElementById('rowVideo').style.transform = 'translateX(0)';
 });
 
 // ---- LIGHTBOX FOTO ----
@@ -411,23 +406,6 @@ function closeLB() { lightbox.classList.remove('active'); lightboxImg.src = ''; 
 lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLB(); });
 document.getElementById('lightboxClose').addEventListener('click', closeLB);
 
-// ---- LIGHTBOX VIDEO ----
-let videoOffset = 0;
-function getVideoItemWidth() {
-  const first = document.querySelector('#rowVideo .video-item');
-  return first ? first.offsetWidth + 8 : 0;
-}
-function slideVideo(dir) {
-  const w = getVideoItemWidth();
-  const vis = window.innerWidth >= 600 ? 4 : 2;
-  const total = 4;
-  const maxOffset = Math.max(0, (total - vis) * w);
-  videoOffset = Math.max(0, Math.min(videoOffset + dir * w, maxOffset));
-  document.getElementById('rowVideo').style.transform = 'translateX(-' + videoOffset + 'px)';
-}
-document.getElementById('videoArrowLeft').addEventListener('click', () => slideVideo(-1));
-document.getElementById('videoArrowRight').addEventListener('click', () => slideVideo(1));
-window.addEventListener('resize', () => { videoOffset = 0; document.getElementById('rowVideo').style.transform = 'translateX(0)'; });
 
 
 const videoPlayer = document.getElementById('videoLightboxPlayer');
