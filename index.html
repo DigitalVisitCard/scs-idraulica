@@ -283,14 +283,12 @@ footer p { font-size:10px; color:rgba(255,255,255,0.3); letter-spacing:0.06em; t
     <span class="section-eyebrow">Portfolio</span>
     <h2 class="section-title">I nostri lavori</h2>
     <div class="gallery-outer">
-      <button class="arrow-btn arrow-left" id="arrowLeft">&#8592;</button>
       <div class="gallery-scroll">
         <div class="gallery-track">
           <div class="gallery-row" id="rowTop"></div>
           <div class="gallery-row" id="rowBot"></div>
           <!-- riga video con frecce proprie -->
           <div class="video-outer">
-            <button class="arrow-btn arrow-left" id="videoArrowLeft">&#8592;</button>
             <div class="video-scroll">
               <div class="video-row" id="rowVideo">
                 <div class="video-item" onclick="openVideoLB('video1.mp4')">
@@ -417,16 +415,23 @@ function getVideoItemWidth() {
   const first = document.querySelector('#rowVideo .video-item');
   return first ? first.offsetWidth + 8 : 0;
 }
-function slideVideo(dir) {
-  const w = getVideoItemWidth();
-  const vis = window.innerWidth >= 600 ? 4 : 2;
-  const total = 4;
-  const maxOffset = Math.max(0, (total - vis) * w);
-  videoOffset = Math.max(0, Math.min(videoOffset + dir * w, maxOffset));
-  document.getElementById('rowVideo').style.transform = 'translateX(-' + videoOffset + 'px)';
+function slide(dir) {
+  const w = getItemWidth();
+  const maxOffset = Math.max(0, (half - visibleCount()) * w);
+
+  offset = Math.max(0, Math.min(offset + dir * w, maxOffset));
+
+  // immagini
+  rowTop.style.transform = 'translateX(-' + offset + 'px)';
+  rowBot.style.transform = 'translateX(-' + offset + 'px)';
+
+  // video (stessa distanza)
+  const rowVideo = document.getElementById('rowVideo');
+  if (rowVideo) {
+    rowVideo.style.transform = 'translateX(-' + offset + 'px)';
+  }
 }
-document.getElementById('videoArrowLeft').addEventListener('click', () => slideVideo(-1));
-document.getElementById('videoArrowRight').addEventListener('click', () => slideVideo(1));
+}
 window.addEventListener('resize', () => { videoOffset = 0; document.getElementById('rowVideo').style.transform = 'translateX(0)'; });
 
 
