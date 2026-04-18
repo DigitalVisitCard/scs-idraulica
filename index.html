@@ -148,10 +148,24 @@ nav {
 .video-row { display:flex; gap:8px; }
 .video-item {
   flex:0 0 calc(50% - 4px);
+  aspect-ratio:4/3;
   overflow:hidden; background:#000;
-  border-radius:8px;
+  border-radius:8px; cursor:pointer; position:relative;
 }
-.video-item video { width:100%; height:auto; display:block; }
+.video-item video { width:100%; height:100%; object-fit:cover; display:block; pointer-events:none; }
+.video-play-btn {
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  font-size:28px; color:white;
+  background:rgba(10,37,64,0.35);
+  transition:background 0.2s;
+}
+.video-item:hover .video-play-btn { background:rgba(10,37,64,0.55); }
+
+.video-lightbox { display:none; position:fixed; inset:0; z-index:1000; background:rgba(7,27,46,0.97); align-items:center; justify-content:center; padding:16px; }
+.video-lightbox.active { display:flex; }
+.video-lightbox video { max-width:92vw; max-height:88vh; border-radius:4px; }
+.video-lightbox-close { position:absolute; top:16px; right:20px; color:rgba(255,255,255,0.4); cursor:pointer; font-size:11px; font-weight:500; text-transform:uppercase; letter-spacing:0.1em; }
+.video-lightbox-close:hover { color:white; }
 
 .arrow-btn {
   position:absolute; top:calc(50% - 30px); transform:translateY(-50%);
@@ -299,17 +313,21 @@ footer p { font-size:10px; color:rgba(255,255,255,0.3); letter-spacing:0.06em; t
           <div class="gallery-row" id="rowBot"></div>
           <!-- Terza riga: video, stesso stile delle righe foto -->
           <div class="video-row">
-            <div class="video-item">
-              <video controls preload="none"><source src="video1.mp4" type="video/mp4"></video>
+            <div class="video-item" onclick="openVideoLB('video1.mp4')">
+              <video muted preload="metadata" playsinline><source src="video1.mp4" type="video/mp4"></video>
+              <div class="video-play-btn">&#9654;</div>
             </div>
-            <div class="video-item">
-              <video controls preload="none"><source src="video2.mp4" type="video/mp4"></video>
+            <div class="video-item" onclick="openVideoLB('video2.mp4')">
+              <video muted preload="metadata" playsinline><source src="video2.mp4" type="video/mp4"></video>
+              <div class="video-play-btn">&#9654;</div>
             </div>
-            <div class="video-item">
-              <video controls preload="none"><source src="video3.mp4" type="video/mp4"></video>
+            <div class="video-item" onclick="openVideoLB('video3.mp4')">
+              <video muted preload="metadata" playsinline><source src="video3.mp4" type="video/mp4"></video>
+              <div class="video-play-btn">&#9654;</div>
             </div>
-            <div class="video-item">
-              <video controls preload="none"><source src="video4.mp4" type="video/mp4"></video>
+            <div class="video-item" onclick="openVideoLB('video4.mp4')">
+              <video muted preload="metadata" playsinline><source src="video4.mp4" type="video/mp4"></video>
+              <div class="video-play-btn">&#9654;</div>
             </div>
           </div>
         </div>
@@ -344,6 +362,11 @@ footer p { font-size:10px; color:rgba(255,255,255,0.3); letter-spacing:0.06em; t
 <footer>
   <p>&copy; 2025 SCS Idraulica di Caldare Silviu &middot; Tutti i diritti riservati</p>
 </footer>
+
+<div class="video-lightbox" id="videoLightbox">
+  <span class="video-lightbox-close" id="videoLightboxClose">Chiudi &times;</span>
+  <video id="videoLightboxPlayer" controls playsinline></video>
+</div>
 
 <div class="lightbox" id="lightbox">
   <span class="lightbox-close" id="lightboxClose">Chiudi &times;</span>
@@ -408,9 +431,25 @@ const lightboxImg = document.getElementById('lightboxImg');
 function closeLB() { lightbox.classList.remove('active'); lightboxImg.src = ''; }
 lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLB(); });
 document.getElementById('lightboxClose').addEventListener('click', closeLB);
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLB(); });
 
-document.getElementById('mailCopy').addEventListener('click', () => {
+
+const videoLightbox = document.getElementById('videoLightbox');
+const videoLightboxPlayer = document.getElementById('videoLightboxPlayer');
+function openVideoLB(src) {
+  videoLightboxPlayer.src = src;
+  videoLightbox.classList.add('active');
+  videoLightboxPlayer.play();
+}
+function closeVideoLB() {
+  videoLightbox.classList.remove('active');
+  videoLightboxPlayer.pause();
+  videoLightboxPlayer.src = '';
+}
+videoLightbox.addEventListener('click', e => { if (e.target === videoLightbox) closeVideoLB(); });
+document.getElementById('videoLightboxClose').addEventListener('click', closeVideoLB);
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeLB(); closeVideoLB(); } });
+
+
   navigator.clipboard.writeText('caldaresilviu@gmail.com').then(() => {
     const fb = document.getElementById('copyFeedback');
     fb.textContent = 'Copiata';
@@ -421,5 +460,4 @@ document.getElementById('mailCopy').addEventListener('click', () => {
 
 </body>
 </html>
-
 
