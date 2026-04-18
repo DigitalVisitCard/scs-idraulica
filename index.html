@@ -392,9 +392,18 @@ function visibleCount() { return window.innerWidth >= 600 ? 4 : 2; }
 function slide(dir) {
   const w = getItemWidth();
   const maxOffset = Math.max(0, (half - visibleCount()) * w);
+
   offset = Math.max(0, Math.min(offset + dir * w, maxOffset));
+
+  // muove immagini
   rowTop.style.transform = 'translateX(-' + offset + 'px)';
   rowBot.style.transform = 'translateX(-' + offset + 'px)';
+
+  // 🔥 MUOVE ANCHE I VIDEO
+  const rowVideo = document.getElementById('rowVideo');
+  if (rowVideo) {
+    rowVideo.style.transform = 'translateX(-' + offset + 'px)';
+  }
 }
 document.getElementById('arrowLeft').addEventListener('click', () => slide(-1));
 document.getElementById('arrowRight').addEventListener('click', () => slide(1));
