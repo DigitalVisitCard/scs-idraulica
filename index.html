@@ -97,7 +97,9 @@ nav {
 }
 .divider-cta:hover { background:var(--teal-mid); }
 
-.gallery-outer { position:relative; padding:0 44px; }
+/* GALLERIA */
+.gallery-section { padding:64px 20px; background:var(--slate-light); }
+.gallery-outer { position:relative; }
 .gallery-scroll { overflow:hidden; width:100%; }
 .gallery-track { display:flex; flex-direction:column; gap:8px; }
 
@@ -115,6 +117,9 @@ nav {
 .gallery-item:hover img { transform:scale(1.05); filter:saturate(1); }
 
 /* RIGA VIDEO — stesso layout delle righe foto */
+.video-outer { position:relative; }
+.video-scroll { overflow:hidden; width:100%; }
+.video-row { display:flex; gap:8px; transition:transform 0.45s cubic-bezier(0.25,0.46,0.45,0.94); }
 .video-item {
   flex:0 0 calc(50% - 4px);
   aspect-ratio:4/3;
@@ -132,7 +137,7 @@ nav {
 .video-item:hover .video-play-btn { background:rgba(10,37,64,0.6); }
 
 .arrow-btn {
-  position:absolute; top:50%; transform:translateY(-50%);
+  position:absolute; top:40%; transform:translateY(-50%);
   width:36px; height:36px;
   background:var(--navy); color:white;
   border:none; font-size:14px; cursor:pointer; z-index:10;
@@ -140,17 +145,22 @@ nav {
   border-radius:12px; transition:background 0.2s;
 }
 .arrow-btn:hover { background:var(--blue); }
-.arrow-left { left:4px; }
-.arrow-right { right:4px; }
+.arrow-left { left:-8px; }
+.arrow-right { right:-8px; }
 
 /* LIGHTBOX FOTO */
 .lightbox { display:none; position:fixed; inset:0; z-index:999; background:rgba(7,27,46,0.96); align-items:center; justify-content:center; padding:16px; cursor:zoom-out; }
 .lightbox.active { display:flex; }
 .lightbox img { max-width:90vw; max-height:88vh; object-fit:contain; border-radius:4px; }
-.lightbox-close { position:absolute; top:16px; right:16px; cursor:pointer; font-size:14px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; background:var(--teal); color:white; padding:10px 18px; border-radius:4px; transition:background 0.2s; z-index:10; }
-.lightbox-close:hover { background:var(--teal-mid); }
-.video-lightbox-close { position:absolute; top:16px; right:16px; cursor:pointer; font-size:14px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; background:var(--teal); color:white; padding:10px 18px; border-radius:4px; transition:background 0.2s; z-index:10; }
-.video-lightbox-close:hover { background:var(--teal-mid); }
+.lightbox-close { position:absolute; top:16px; right:16px; cursor:pointer; font-size:14px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; background:white; color:var(--navy); padding:10px 18px; border-radius:4px; transition:background 0.2s, color 0.2s; z-index:10; }
+.lightbox-close:hover { background:var(--teal-mid); color:white; }
+
+/* LIGHTBOX VIDEO */
+.video-lightbox { display:none; position:fixed; inset:0; z-index:1000; background:rgba(7,27,46,0.97); align-items:center; justify-content:center; padding:16px; }
+.video-lightbox.active { display:flex; }
+.video-lightbox video { width:auto; height:auto; max-width:min(100%, 90vw); max-height:85vh; border-radius:4px; display:block; object-fit:none; }
+.video-lightbox-close { position:absolute; top:16px; right:16px; cursor:pointer; font-size:14px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; background:white; color:var(--navy); padding:10px 18px; border-radius:4px; transition:background 0.2s, color 0.2s; z-index:10; }
+.video-lightbox-close:hover { background:var(--teal-mid); color:white; }
 
 /* CONTATTI */
 .contact-section { padding:64px 20px; background:var(--navy); }
@@ -197,9 +207,8 @@ footer p { font-size:10px; color:rgba(255,255,255,0.3); letter-spacing:0.06em; t
   .gallery-section { padding:96px 40px; }
   .gallery-item { flex:0 0 calc(25% - 6px); }
   .video-item { flex:0 0 calc(25% - 6px); }
-  .gallery-outer { padding:0 52px; }
-  .arrow-left { left:4px; }
-  .arrow-right { right:4px; }
+  .arrow-left { left:-22px; }
+  .arrow-right { right:-22px; }
   .arrow-btn { width:44px; height:44px; font-size:16px; }
   .contact-section { padding:96px 40px; }
   .contact-grid { grid-template-columns:repeat(2,1fr); }
@@ -273,21 +282,12 @@ footer p { font-size:10px; color:rgba(255,255,255,0.3); letter-spacing:0.06em; t
   <div class="container">
     <span class="section-eyebrow">Portfolio</span>
     <h2 class="section-title">I nostri lavori</h2>
-    <div class="gallery-outer" style="isolation:isolate;">
+    <div class="gallery-outer">
       <button class="arrow-btn arrow-left" id="arrowLeft">&#8592;</button>
       <div class="gallery-scroll">
         <div class="gallery-track">
           <div class="gallery-row" id="rowTop"></div>
           <div class="gallery-row" id="rowBot"></div>
-        </div>
-      </div>
-      <button class="arrow-btn arrow-right" id="arrowRight">&#8594;</button>
-    </div>
-    <!-- riga video con frecce proprie indipendenti -->
-    <div class="gallery-outer" style="margin-top:8px; isolation:isolate;">
-      <button class="arrow-btn arrow-left" id="videoArrowLeft">&#8592;</button>
-      <div class="gallery-scroll">
-        <div class="gallery-track">
           <div class="gallery-row" id="rowVideo">
             <div class="video-item" onclick="openVideoLB('video1.mp4')">
               <video muted preload="metadata" playsinline><source src="video1.mp4" type="video/mp4"></video>
@@ -308,7 +308,7 @@ footer p { font-size:10px; color:rgba(255,255,255,0.3); letter-spacing:0.06em; t
           </div>
         </div>
       </div>
-      <button class="arrow-btn arrow-right" id="videoArrowRight">&#8594;</button>
+      <button class="arrow-btn arrow-right" id="arrowRight">&#8594;</button>
     </div>
   </div>
 </section>
@@ -348,7 +348,7 @@ footer p { font-size:10px; color:rgba(255,255,255,0.3); letter-spacing:0.06em; t
 <!-- LIGHTBOX VIDEO -->
 <div class="video-lightbox" id="videoLightbox">
   <span class="video-lightbox-close" id="videoLightboxClose">Chiudi &times;</span>
-  <video id="videoLightboxPlayer" controls playsinline controlslist="nodownload noplaybackrate" disablepictureinpicture></video>
+  <video id="videoLightboxPlayer" controls playsinline></video>
 </div>
 
 <script>
@@ -388,28 +388,12 @@ function slide(dir) {
   offset = Math.max(0, Math.min(offset + dir * w, maxOffset));
   rowTop.style.transform = 'translateX(-' + offset + 'px)';
   rowBot.style.transform = 'translateX(-' + offset + 'px)';
+  document.getElementById('rowVideo').style.transform = 'translateX(-' + offset + 'px)';
 }
 document.getElementById('arrowLeft').addEventListener('click', () => slide(-1));
 document.getElementById('arrowRight').addEventListener('click', () => slide(1));
-
-let videoOffset = 0;
-function getVideoItemWidth() {
-  const first = document.querySelector('#rowVideo .video-item');
-  return first ? first.offsetWidth + 8 : 0;
-}
-function slideVideo(dir) {
-  const w = getVideoItemWidth();
-  const vis = window.innerWidth >= 600 ? 4 : 2;
-  const maxOffset = Math.max(0, (4 - vis) * w);
-  videoOffset = Math.max(0, Math.min(videoOffset + dir * w, maxOffset));
-  document.getElementById('rowVideo').style.transform = 'translateX(-' + videoOffset + 'px)';
-}
-document.getElementById('videoArrowLeft').addEventListener('click', () => slideVideo(-1));
-document.getElementById('videoArrowRight').addEventListener('click', () => slideVideo(1));
-
 window.addEventListener('resize', () => {
   offset = 0;
-  videoOffset = 0;
   rowTop.style.transform = 'translateX(0)';
   rowBot.style.transform = 'translateX(0)';
   document.getElementById('rowVideo').style.transform = 'translateX(0)';
@@ -435,11 +419,6 @@ function closeVideoLB() {
   videoPlayer.pause();
   videoPlayer.src = '';
 }
-videoPlayer.addEventListener('ended', () => {
-  videoPlayer.pause();
-  videoPlayer.currentTime = 0;
-  videoPlayer.load();
-});
 videoLightbox.addEventListener('click', e => { if (e.target === videoLightbox) closeVideoLB(); });
 document.getElementById('videoLightboxClose').addEventListener('click', closeVideoLB);
 document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeLB(); closeVideoLB(); } });
@@ -456,5 +435,6 @@ document.getElementById('mailCopy').addEventListener('click', () => {
 
 </body>
 </html>
+
 
 
