@@ -97,9 +97,7 @@ nav {
 }
 .divider-cta:hover { background:var(--teal-mid); }
 
-/* GALLERIA */
-.gallery-section { padding:64px 20px; background:var(--slate-light); }
-.gallery-outer { position:relative; }
+.gallery-outer { position:relative; padding:0 44px; }
 .gallery-scroll { overflow:hidden; width:100%; }
 .gallery-track { display:flex; flex-direction:column; gap:8px; }
 
@@ -117,9 +115,6 @@ nav {
 .gallery-item:hover img { transform:scale(1.05); filter:saturate(1); }
 
 /* RIGA VIDEO — stesso layout delle righe foto */
-.video-outer { position:relative; }
-.video-scroll { overflow:hidden; width:100%; }
-.video-row { display:flex; gap:8px; transition:transform 0.45s cubic-bezier(0.25,0.46,0.45,0.94); }
 .video-item {
   flex:0 0 calc(50% - 4px);
   aspect-ratio:4/3;
@@ -137,7 +132,7 @@ nav {
 .video-item:hover .video-play-btn { background:rgba(10,37,64,0.6); }
 
 .arrow-btn {
-  position:absolute; top:40%; transform:translateY(-50%);
+  position:absolute; top:50%; transform:translateY(-50%);
   width:36px; height:36px;
   background:var(--navy); color:white;
   border:none; font-size:14px; cursor:pointer; z-index:10;
@@ -145,8 +140,8 @@ nav {
   border-radius:12px; transition:background 0.2s;
 }
 .arrow-btn:hover { background:var(--blue); }
-.arrow-left { left:-8px; }
-.arrow-right { right:-8px; }
+.arrow-left { left:4px; }
+.arrow-right { right:4px; }
 
 /* LIGHTBOX FOTO */
 .lightbox { display:none; position:fixed; inset:0; z-index:999; background:rgba(7,27,46,0.96); align-items:center; justify-content:center; padding:16px; cursor:zoom-out; }
@@ -202,8 +197,9 @@ footer p { font-size:10px; color:rgba(255,255,255,0.3); letter-spacing:0.06em; t
   .gallery-section { padding:96px 40px; }
   .gallery-item { flex:0 0 calc(25% - 6px); }
   .video-item { flex:0 0 calc(25% - 6px); }
-  .arrow-left { left:-22px; }
-  .arrow-right { right:-22px; }
+  .gallery-outer { padding:0 52px; }
+  .arrow-left { left:4px; }
+  .arrow-right { right:4px; }
   .arrow-btn { width:44px; height:44px; font-size:16px; }
   .contact-section { padding:96px 40px; }
   .contact-grid { grid-template-columns:repeat(2,1fr); }
@@ -277,12 +273,21 @@ footer p { font-size:10px; color:rgba(255,255,255,0.3); letter-spacing:0.06em; t
   <div class="container">
     <span class="section-eyebrow">Portfolio</span>
     <h2 class="section-title">I nostri lavori</h2>
-    <div class="gallery-outer">
+    <div class="gallery-outer" style="isolation:isolate;">
       <button class="arrow-btn arrow-left" id="arrowLeft">&#8592;</button>
       <div class="gallery-scroll">
         <div class="gallery-track">
           <div class="gallery-row" id="rowTop"></div>
           <div class="gallery-row" id="rowBot"></div>
+        </div>
+      </div>
+      <button class="arrow-btn arrow-right" id="arrowRight">&#8594;</button>
+    </div>
+    <!-- riga video con frecce proprie indipendenti -->
+    <div class="gallery-outer" style="margin-top:8px; isolation:isolate;">
+      <button class="arrow-btn arrow-left" id="videoArrowLeft">&#8592;</button>
+      <div class="gallery-scroll">
+        <div class="gallery-track">
           <div class="gallery-row" id="rowVideo">
             <div class="video-item" onclick="openVideoLB('video1.mp4')">
               <video muted preload="metadata" playsinline><source src="video1.mp4" type="video/mp4"></video>
@@ -303,7 +308,7 @@ footer p { font-size:10px; color:rgba(255,255,255,0.3); letter-spacing:0.06em; t
           </div>
         </div>
       </div>
-      <button class="arrow-btn arrow-right" id="arrowRight">&#8594;</button>
+      <button class="arrow-btn arrow-right" id="videoArrowRight">&#8594;</button>
     </div>
   </div>
 </section>
@@ -394,7 +399,7 @@ function getVideoItemWidth() {
 }
 function slideVideo(dir) {
   const w = getVideoItemWidth();
-  const vis = visibleCount();
+  const vis = window.innerWidth >= 600 ? 4 : 2;
   const maxOffset = Math.max(0, (4 - vis) * w);
   videoOffset = Math.max(0, Math.min(videoOffset + dir * w, maxOffset));
   document.getElementById('rowVideo').style.transform = 'translateX(-' + videoOffset + 'px)';
